@@ -1,3 +1,4 @@
+import { usersroute } from "./routes/users.routes.js";
 import { connectDB } from "./utilities/connectDB.js";
 import { authroute } from "./routes/auth.routes.js";
 import cookieParser from "cookie-parser";
@@ -24,6 +25,9 @@ app.use(
 const PORT = process.env.PORT;
 
 app.use("/auth", authroute);
+
+app.use("/users", usersroute);
+
 app.get("/", async (req, res) => {
   res.status(200).send("server-template");
 });
