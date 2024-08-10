@@ -76,6 +76,30 @@ const login = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+const update = async (req, res) => {
+  try {
+    const { id, name, email, phoneNumber, bio } = req.body;
+    if (!id) {
+      return res.status(400).json({ message: 'User ID is required' });
+    }
+    const user = await User.findByIdAndUpdate(
+      id,
+      { name, email, phoneNumber, bio },
+      { new: true }
+    );
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    res.status(200).json({ user });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+
 const check = async (req, res) => {
   try {
     const { email } = req.user;
@@ -93,13 +117,13 @@ const check = async (req, res) => {
 const logout = async (req, res) => {
   try {
     return res
-      .clearCookie("token", COOKIE_OPTIONS)
-      .status(200)
-      .json({ message: "Logged out successfully" });
+    .clearCookie("token", COOKIE_OPTIONS)
+    .status(200)
+    .json({ message: "Logged out successfully" });
   } catch (error) {
     console.error("Logout error:", error.message);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-export { signup, login, check, logout };
+export { signup, login, check, update, logout };

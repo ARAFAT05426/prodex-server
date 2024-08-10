@@ -10,7 +10,7 @@ const getUsers = async (req, res) => {
       const sanitizedName = name.replace(/:/g, "");
       query.name = { $regex: new RegExp(sanitizedName, "i") };
     }
-    const users = await User.find(query).exec();
+    const users = await User.find(query).sort({ createdAt: -1 }).exec();
     return res.status(200).json({ success: true, users });
   } catch (error) {
     console.error("Error fetching users:", error.message);
@@ -20,7 +20,7 @@ const getUsers = async (req, res) => {
   }
 };
 
-const updateUser = async (req, res) => {
+const updateRole = async (req, res) => {
   const { email, role } = req.body;
   if (!email || !role) {
     return res
@@ -71,4 +71,4 @@ const addUser = async (req, res) => {
   }
 };
 
-export { getUsers, updateUser, addUser };
+export { getUsers, updateRole, addUser };
