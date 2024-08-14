@@ -1,6 +1,6 @@
 import express from "express";
 import { check, login, logout, signup, update } from "../controllers/auth.controllers.js";
-import verifyToken from "../utilities/verifyToken.js";
+import verifyToken from "../middlewares/verifyToken.middleware.js";
 const app = express.Router();
 
 app.post("/signup", signup);
