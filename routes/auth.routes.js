@@ -1,15 +1,8 @@
 import express from "express";
-import { check, login, logout, signup, update } from "../controllers/auth.controllers.js";
-import verifyToken from "../middlewares/verifyToken.middleware.js";
+import { logout, setToken } from "../controllers/auth.controllers.js";
 const app = express.Router();
 
-app.post("/signup", signup);
-
-app.post("/login", login);
-
-app.get("/check", verifyToken, check);
-
-app.put("/update", verifyToken, update);
+app.post("/token", setToken);
 
 app.post("/logout", logout);
 

@@ -1,17 +1,31 @@
 import User from "../models/user.model.js";
-import bcrypt from "bcrypt";
 
 const getUsers = async (req, res) => {
-  const { name } = req.query;
+  const { name, role, page = 1, limit = 10 } = req.query;
 
   try {
     const query = {};
-    if (name) {
-      const sanitizedName = name.replace(/:/g, "");
-      query.name = { $regex: new RegExp(sanitizedName, "i") };
+    if (role) {
+      query.role = role;
     }
-    const users = await User.find(query).sort({ createdAt: -1 }).exec();
-    return res.status(200).json({ success: true, users });
+    if (name) {
+      query.name = { $regex: new RegExp(name, "i") };
+    }
+
+    const users = await User.find(query)
+      .skip((page - 1) * limit)
+      .limit(Number(limit))
+      .exec();
+
+    const totalUsers = await User.countDocuments(query);
+
+    return res.status(200).json({
+      success: true,
+      users,
+      totalUsers,
+      totalPages: Math.ceil(totalUsers / limit),
+      currentPage: Number(page),
+    });
   } catch (error) {
     console.error("Error fetching users:", error.message);
     return res
@@ -46,28 +60,27 @@ const updateRole = async (req, res) => {
 };
 
 const addUser = async (req, res) => {
-  const { name, email, role, password } = req.body;
+  const user = req.body;
+  const { email } = user;
+  if (!email) {
+    return res.status(400).json({ message: "Name and email are required." });
+  }
+
   try {
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res
-        .status(400)
-        .json({ message: "User with this email already exists." });
-    }
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({
-      name,
-      email,
-      role,
-      password: hashedPassword,
-    });
-    await newUser.save();
-    res
-      .status(201)
-      .json({ message: "User created successfully", user: newUser });
+    const responce = await User.findOneAndUpdate(
+      { email },
+      { $set: { ...user } },
+      { new: true, upsert: true }
+    );
+
+    const message = responce.isNew
+      ? "User created successfully"
+      : "User updated successfully";
+
+    return res.status(user.isNew ? 201 : 200).json({ message, responce });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.error("Error adding/updating user:", error.message);
+    return res.status(500).json({ message: "Server error" });
   }
 };
 

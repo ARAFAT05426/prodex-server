@@ -6,8 +6,8 @@ const app = express.Router();
 
 app.get("/", verifyToken, getUsers);
 
-app.post("/add", verifyToken, addUser);
+app.put("/add", addUser);
 
-app.patch("/update", verifyToken, authorize("admin"), updateRole);
+app.patch("/update", verifyToken, updateRole);
 
 export { app as usersroute };
