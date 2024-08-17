@@ -3,7 +3,11 @@ const productSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    trim: true,
+  },
+  author: {
+    type: String,
+    required: true,
+    default: ""
   },
   image: {
     type: String,
@@ -35,7 +39,7 @@ const productSchema = new mongoose.Schema({
     required: true,
     min: 0,
     max: 5,
-    default: 0,
+    default: 4.3,
   },
   stock: {
     type: Number,

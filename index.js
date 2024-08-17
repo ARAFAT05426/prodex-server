@@ -2,9 +2,10 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { authroute } from "./routes/auth.routes.js";
+import { statRoute } from "./routes/stats.routes.js";
 import { connectDB } from "./utilities/connectDB.js";
 import { usersroute } from "./routes/users.routes.js";
-import { authroute } from "./routes/auth.routes.js";
 import { productRoute } from "./routes/products.routes.js";
 
 // Load environment variables
@@ -32,6 +33,8 @@ app.use(
 app.use("/auth", authroute);
 
 app.use("/users", usersroute);
+
+app.use("/stats", statRoute);
 
 app.use("/products", productRoute);
 

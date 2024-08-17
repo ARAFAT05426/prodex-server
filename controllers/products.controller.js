@@ -5,16 +5,21 @@ const getProducts = async (req, res) => {
   try {
     const {
       page = 1,
-      limit = 10,
+      limit = 3,
       search = "",
       category,
       brand,
       priceRange,
       sortByPrice,
-      sortByDate,
+      sortByDate = "Newest", // Default to "Newest" if not provided
+      author,
     } = req.query;
 
     let filter = {};
+
+    if (author) {
+      filter.author = author;
+    }
 
     if (search) {
       filter.name = { $regex: search, $options: "i" };
@@ -36,23 +41,22 @@ const getProducts = async (req, res) => {
     }
 
     let sortOptions = {};
+
     if (sortByPrice === "Low-High") {
       sortOptions.price = 1;
     } else if (sortByPrice === "High-Low") {
       sortOptions.price = -1;
     }
 
-    if (sortByDate === "Newest") {
-      sortOptions.createdAt = -1;
-    } else if (sortByDate === "Oldest") {
-      sortOptions.createdAt = 1;
-    }
+    // Sorting by date (newest first by default)
+    sortOptions.createdAt = sortByDate === "Newest" ? -1 : 1;
 
     const skip = (page - 1) * limit;
     const products = await Product.find(filter)
       .sort(sortOptions)
       .skip(skip)
       .limit(parseInt(limit));
+
     const totalProducts = await Product.countDocuments(filter);
 
     res.json({
@@ -62,8 +66,10 @@ const getProducts = async (req, res) => {
       totalProducts,
     });
   } catch (error) {
-    console.error("Error getting products:", error);
-    res.status(500).json({ message: "Server Error", error });
+    console.error("Error getting products:", error.message || error);
+    res
+      .status(500)
+      .json({ message: "Server Error", error: error.message || error });
   }
 };
 
@@ -71,6 +77,7 @@ const getProducts = async (req, res) => {
 const addProduct = async (req, res) => {
   try {
     const {
+      author,
       name,
       price,
       stock,
@@ -82,6 +89,7 @@ const addProduct = async (req, res) => {
     } = req.body;
 
     if (
+      !author ||
       !name ||
       !price ||
       !stock ||
@@ -96,6 +104,7 @@ const addProduct = async (req, res) => {
     }
 
     const newProduct = new Product({
+      author,
       name,
       price,
       stock,
