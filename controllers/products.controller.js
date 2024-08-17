@@ -6,13 +6,13 @@ const getProducts = async (req, res) => {
     const {
       page = 1,
       limit = 3,
-      search = "",
-      category,
       brand,
-      priceRange,
-      sortByPrice,
-      sortByDate = "Newest", // Default to "Newest" if not provided
       author,
+      category,
+      priceRange,
+      search = "",
+      sortByPrice,
+      sortByDate = "Newest",
     } = req.query;
 
     let filter = {};
