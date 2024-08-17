@@ -9,12 +9,8 @@ import { usersroute } from "./routes/users.routes.js";
 import { productRoute } from "./routes/products.routes.js";
 dotenv.config();
 
-// Load environment variables
-
-// Initialize express app
 const app = express();
 
-// Middleware
 app.use(
   cors({
     origin: [
@@ -33,7 +29,6 @@ app.use(cookieParser());
 // Database connection
 connectDB();
 
-// Define routes
 app.use("/auth", authroute);
 app.use("/users", usersroute);
 app.use("/stats", statRoute);
@@ -52,8 +47,6 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json("Something went wrong!");
 });
-
-// Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

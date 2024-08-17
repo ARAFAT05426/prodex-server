@@ -1,27 +1,22 @@
-# Server Template
+# ProdEx Server
 
-## Overview
+## Project Overview
 
-**Server Template** is a pre-configured Express.js server designed to serve as a starting point for your backend projects. It provides a robust foundation with essential features and best practices to streamline your development process.
+This Node.js server is part of a ProdEx that interacts with a MongoDB database. It provides RESTful APIs for managing product data, including functionalities for searching, filtering, pagination, and sorting. 
 
-## Features
+## Completed Functionalities
 
-- **Express.js**: A minimalist web framework for Node.js that provides a solid foundation for building web applications and APIs.
-- **Pre-configured Middleware**: Includes commonly used middleware for handling requests, responses, and error logging.
-- **Authentication**: Basic authentication setup with support for user registration, login, and session management.
-- **Environment Configuration**: Easily configurable environment variables for managing different environments (development, production).
-- **Error Handling**: Structured error handling and logging to facilitate debugging and monitoring.
+- **API Development**: Implemented RESTful APIs to fetch, create, update, and delete product data.
+- **Pagination**: Added pagination support for efficient data retrieval.
+- **Searching**: Enabled product search by name.
+- **Categorization**: Implemented categorization by brand, category, and price range.
+- **Sorting**: Added sorting options by price and date.
+- **Authentication**: Integrated Google and email/password authentication using Firebase.
 
 ## Getting Started
 
-### Prerequisites
+To clone and run this Node.js server locally, follow these steps:
 
-- [Node.js](https://nodejs.org/) (v14 or higher)
-- [npm](https://www.npmjs.com/) (or [yarn](https://yarnpkg.com/))
-
-### Installation
-
-1. **Clone the Repository:**
-
-   ```bash
-   git clone https://github.com/ARAFAT05426/server-template.git
+### Cloning the Repository
+```bash
+   git clone [https://github.com/ARAFAT05426/prodex-server.git]
