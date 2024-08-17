@@ -7,35 +7,36 @@ import { statRoute } from "./routes/stats.routes.js";
 import { connectDB } from "./utilities/connectDB.js";
 import { usersroute } from "./routes/users.routes.js";
 import { productRoute } from "./routes/products.routes.js";
+dotenv.config();
 
 // Load environment variables
-dotenv.config();
 
 // Initialize express app
 const app = express();
 
 // Middleware
+app.use(
+  cors({
+    origin: [
+      process.env.CLIENT_URL,
+      "http://localhost:5173",
+      "https://prodex-solution.web.app",
+    ],
+    credentials: true,
+    optionsSuccessStatus: 200,
+  })
+);
+
 app.use(express.json());
 app.use(cookieParser());
 
 // Database connection
 connectDB();
 
-app.use(
-  cors({
-    origin: [process.env.CLIENT_URL, "http://localhost:5173"],
-    credentials: true,
-    optionsSuccessStatus: 200,
-  })
-);
-
 // Define routes
 app.use("/auth", authroute);
-
 app.use("/users", usersroute);
-
 app.use("/stats", statRoute);
-
 app.use("/products", productRoute);
 
 app.get("/", (req, res) => {
